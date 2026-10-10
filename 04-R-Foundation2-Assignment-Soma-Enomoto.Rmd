@@ -44,68 +44,111 @@ For your second R Assignment, complete the questions below. Remember, weekly ass
 # Set up
 1. Load the tidyverse library. 
 ```{r}
+#install.packages("tidyverse")
+library(tidyverse)
 
 ```
 
 2. Load the billboard data. 
 ```{r}
+install.packages("billboard")
 
+library("billboard")
+data("billboard")
 ```
 
 3. Describe the dataset. 
 ```{r}
+names(billboard)
+summary(billboard)
 
+#This dataset contains 79 columns (79 variables, including artist, track, date.entered, wk1-wk76) and 317 rows/observations. There are 228 unique artists in total with Jay-Z recorded the highest (= 2%) and 316 unique tracks in total. Date was recorded the time period of 1999-06-05 -- 2000-12-30 and the range of 2000-02-13 -- 2000-04-03 recorded the highest frequency with 49 (15.5%).
 ```
 
 4. Print the column names from this dataset. 
 ```{r}
-
+colnames(billboard)
 ```
 
 5. Print the first 5 entries in the dataset. 
 ```{r}
-
+head(billboard, 5)
 ```
 
 
 # Practice
 1. Create a subset of data that has Jay-Z as the only artist. How many songs are in it?
 ```{r}
+jayz_data<- subset(billboard, billboard$artist == "Jay-Z")
+jayz_data
 
+#Answer: 5 songs
 ```
 
 2. In the original dataset, use filter to find information about the song "All the small things." What was the highest position (i.e. lowest number) this song reached on the billboard 100? 
 ```{r}
+info_about_allthesmallthings<- billboard%>%filter(track == "All The Small Things")
+info_about_allthesmallthings
 
+#Answer: 6 (week12)
 ```
 
 3. Create a subset of data for songs Tim McGraw sang. Summarize the data for wk 1.
 ```{r}
+McGraw_songs<- subset(billboard, billboard$artist == "McGraw, Tim")
+McGraw_songs
+
+summary(McGraw_songs$wk1)
+
 
 ```
 
 4. Create a function that can be used to determine if Britney Spears sang the song. 
 ```{r}
+detect_spearssong<- function(name){ifelse(name == "Spears, Britney", "Yes", "No")}
+#detect_spearssong("Spears, Britney")
 
 ```
 
 5. Test your function on the billboard data. Save the results to a new column called "wasItBritney"
 ```{r}
+#detect_spearssong("Spears, Britney")
+
+library(tidyverse) 
+data("billboard")
+
+billboard$wasItBritney<- NA
+billboard$wasItBritney<- detect_spearssong(billboard$artist)
+  
+#I first created the new column "wasItBritney" and then tested the function directly. 
+#I am sorry if this was not something you meant in the question. Thank you for your understanding. 
+
+#tried another approach
+#billboard$wasItBritney[billboard$artist == "Spears, Britney"]<- "Yes"
+#billboard$wasItBritney[billboard$artist != "Spears, Britney"]<- "No"
 
 ```
 
 6. Use a for loop to determine if a song placed 50 or below or placed above 50 during the first week. 
 ```{r}
+billboard$rank50orbelow_week1<- NA
+for(i in 1:nrow(billboard)){billboard$rank50orbelow_week1[i]<- billboard$wk1[i]>=50}
+
+#for(i in 1:nrow(billboard)){billboard$rank50orbelow_week1[i]<- billboard$wk1[i]>50 | billboard$wk1[i]==50}
+
+#In my understanding, above 50 means ranked lower than 50th place during the first week. In the new column "rank50orbelow_week1" (sorry if I am not required to create), songs with rank = 50 or below 50 are recorded as "TRUE." This is the way I interpreted this question, please let me know if I'm wrong!
 
 ```
 
 7. Use an if else statement to determine the same information as you obtained with the for loop. 
 ```{r}
+billboard$rank50orbelow_week1_withifelse<- NA
+billboard$rank50orbelow_week1_withifelse<- ifelse(billboard$wk1>=50, "TRUE", "FALSE")
 
 ```
 
 8. Compare your results in 6 and 7. 
 ```{r}
-
+#I am not sure what exactly to answer here, but as far as I can tell, the results from 6 and 7 are corresponding to/matching each other in the table. I accidentally created a few extra columns that are mistake, so please disregard them.
 ```
 
