@@ -1,0 +1,89 @@
+---
+title: "PSY 4960 Quiz 1"
+author: "Soma Enomoto"
+date: "2026-10-14"
+output: html_document
+---
+
+1. Open the tidyverse library.
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
+2. Open the starwars dataset.
+
+```{r}
+data(starwars)
+```
+
+
+3. Create a subset of data that contains only the humans from the starwars franchise.
+
+```{r}
+humans_starwars<- subset(starwars, starwars$species == "Human")
+```
+
+4. In this subset of data, who is the tallest character?
+
+```{r}
+humans_starwars #print
+
+#The tallest character is Darth Vader with 202
+```
+
+5. In this subset of data, print the information about the character in the third row.
+```{r}
+row3_subset<- humans_starwars[3,]
+row3_subset
+
+```
+
+
+6. In the full starwars dataset, calculate the average mass for the masculine characters.
+
+```{r}
+gender_starwars<- subset(starwars, starwars$gender == "masculine")
+gender_starwars
+#summary(gender_starwars) #Double-checked
+summary(gender_starwars$mass)
+#Average (Mean) mass for the masculine is 106.5
+```
+
+
+7. Create a dataset that contains only the characters and the films that they appeared in from the full dataset.
+
+#I assume that the question asked to create a new dataset that only contains information of chatacters and films (whihc is 2 columns).
+
+```{r}
+characters_and_film |> select(name, films)
+```
+
+
+
+8. Create a new column in the starwars dataset that contains a "ranking" of all characters (Note: you don't have to actually rank them. Just fill the column in with the numbers 1-87)
+
+```{r}
+starwars$ranking<- NA #created a new column
+starwars$ranking<- c(1:87) #put numbers 1-87 in rows
+```
+
+
+
+9. Create a subset of data for the characters from Naboo. How many characters are from Naboo?
+```{r}
+characters_from_Naboo<- subset(starwars, starwars$homeworld == "Naboo") #crated a new subset
+characters_from_Naboo #print
+#How many?: 11 characters are from Naboo.
+```
+
+
+
+10. How many droids are in the full dataset?
+```{r}
+droids_starwars<- subset(starwars, starwars$species == "Droid")
+droids_starwars
+summary(droids_starwars)
+
+#How many droids?: 6 droids.(length is 6 in summary or checked the table directly after creating the subset)
+```
+
