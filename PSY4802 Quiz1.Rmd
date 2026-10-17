@@ -55,7 +55,10 @@ summary(gender_starwars$mass)
 #I assume that the question asked to create a new dataset that only contains information of chatacters and films (whihc is 2 columns).
 
 ```{r}
-characters_and_film |> select(name, films)
+
+#library(tidyverse)
+characters_and_film <- starwars |> select(name, films) 
+characters_and_film #print
 ```
 
 
