@@ -1,0 +1,118 @@
+---
+title: "SPY 4802 Assignment 3- Data Wrangling and Cleaning"
+author: "Soma Enomoto"
+date: "2026-10-26"
+output: html_document
+---
+
+---
+title: "Dataset Manipulation Assignment"
+author: "Amanda Mae Woodward"
+date: "2026-10-07"
+output: html_document
+---
+```{r}
+library(tidyr)
+library(dplyr) #to get html file
+```
+
+
+
+#Part 1
+1.Open the sleep dataset in R
+```{r}
+data("sleep")
+```
+
+
+2. Is it long or wide format? How do you know?
+```{r}
+#long. It has a fewer columns and more rows. It contains multiple rows per participant.
+```
+
+
+3. Transform this data so that it is in the other format.
+```{r}
+sleepwide<- pivot_wider(sleep, id_cols = "ID", names_from = "group", values_from = "extra")
+sleepwide
+
+
+```
+
+4. Transform your data back to its original format.
+```{r}
+
+
+sleepLongAgain<- pivot_longer(sleepwide, cols = c("1", "2"), names_to = "group", values_to = "extra")
+sleepLongAgain
+
+```
+
+
+
+5. Open the Starwars dataset
+```{r}
+data("starwars")
+
+```
+
+6. Create homeworld as a factor. How many levels does it have?
+```{r}
+starwars$homeworld<- as.factor(starwars$homeworld)
+starwars$homeworld
+
+#How many levels?- 48 levels
+```
+
+7. Reorder homeworld so that Naboo is the reference group.
+```{r}
+starwars$homeworld<- relevel(starwars$homeworld, ref = "Naboo")
+levels(starwars$homeworld)
+```
+#R is not working. I will complete the rest when it is resolved. Thank you.
+
+8. Use mutate to create a column transforming kg to pounds. (hint: you may need to look up the conversion)
+```{r}
+starwars<- starwars %>% mutate(mass_in_lbs = mass*2.2)
+starwars
+
+```
+
+
+9. Print a summary of your column from #8
+```{r}
+summary(starwars$mass_in_lbs)
+```
+
+
+#Part 2
+10. open the billboard dataset.
+```{r}
+data("billboard")
+```
+
+11. are the data in this dataframe in long or wide format? explain how you know.
+```{r}
+#The data are wide format because it is organized by each week from Week 1 to 76 in each column.
+```
+
+12. change the data from its original format to the other version.
+```{r}
+billboard_long<- pivot_longer(billboard, cols = wk1:wk76, names_to = "week", values_to = "score")
+billboard_long
+                              
+```
+
+13. change it from your altered version in #3 back to its original state.
+#I do not understand what this question asks. But I will change it to wide format again.
+```{r}
+billboard_Wide_Again<- pivot_wider(billboard_long, id_cols = c("artist", "track", "date.entered"), names_from = "week", values_from = "score")
+billboard_Wide_Again
+```
+
+14. Separate the date entered column into three columns: one for year, one for month, and one for day.
+```{r}
+separate_date.entered<- separate(billboard_Wide_Again, date.entered, into = c("year", "month", "day"), sep = "-")
+separate_date.entered
+```
+
