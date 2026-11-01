@@ -1,0 +1,69 @@
+---
+title: "08-Visualization Assignment-Soma Enomoto"
+author: "Soma Enomoto"
+date: "2026-10-30"
+output: html_document
+---
+
+---
+title: "ggplot pt 1 assignment"
+author: "Amanda Mae Woodward"
+date: "2026-10-29"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+1. open the starwars dataset in tidyverse
+```{r}
+data("starwars")
+```
+
+
+2. create a graph showing the frequency of eye colors in the dataset. 
+```{r}
+library("jtools")
+
+ggplot(starwars, aes(eye_color))+geom_bar()
+
+```
+
+3. Customize your graph to make it more presentable. Consider color, backgrounds, axes, etc. 
+```{r}
+ggplot(starwars, aes(eye_color))+geom_bar(fill= "navyblue", color = "gray")+theme_apa()+xlab("X-axis: Eye Color")+ylab("Y-axis: Count")+ggtitle("Frequency of Eye Colors")
+
+```
+
+
+4. Create a graph displaying information about character's height in each homeworld. 
+```{r}
+
+ggplot(starwars, aes(x = homeworld, y = height))+geom_boxplot()+geom_jitter()+theme_apa()
+```
+
+5. Customize your graph to make it more presentable. Consider color, backgrounds, axes, etc.
+```{r}
+ggplot(starwars, aes(x = homeworld, y = height))+geom_boxplot(fill= "skyblue", color = "black")+geom_jitter(color = "navyblue")+theme_apa()+xlab("X-axis: Homeworld Locations")+ylab("Y-axis: Height")+ggtitle("Height in Each Homeworld")
+```
+
+6. Create a graph of character's height by mass. 
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(na.rm = TRUE)+theme_apa()
+```
+
+7.Customize your graph to make it more presentable. Consider color, backgrounds, axes, etc.
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(color = "#FF7F24", na.rm = TRUE)+theme_apa()+xlab("X-axis: Mass")+ylab("Y-axis: Height")+ggtitle("Relationship Between Height and Mass")
+```
+
+8. Add gender as a third variable to your graph of height by mass. 
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(aes(color = gender), na.rm = TRUE)
+```
+
+9. Customize your graph to make it more presentable. Consider color, backgrounds, axes, etc.
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(aes(color = gender), na.rm = TRUE)+scale_color_manual(values = c("feminine" = "#FF69B4", "masculine" = "#1874CD"))+ theme_classic()+xlab("X-axis: Mass")+ylab("Y-axis: Height")+ggtitle("Relationship Between Height and Mass (Feminine vs. Masculine)")
+```
