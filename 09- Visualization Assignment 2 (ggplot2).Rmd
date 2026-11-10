@@ -1,0 +1,99 @@
+---
+title: "ggplot2 Assignment"
+author: "Soma Enomoto"
+date: "2026-11-10"
+output: html_document
+---
+
+---
+title: "graphing part 2"
+author: "Amanda Mae Woodward"
+date: "2026-11-03"
+output: html_document
+---
+
+
+
+1. Open the starwars dataset (located in tidyverse)
+```{r}
+library(tidyverse)
+data("starwars")
+```
+
+2. Create a scatter plot of character's height and mass. 
+```{r}
+library(ggplot2)
+library(jtools)
+library(Rmisc)
+
+ggplot(starwars, aes(x = mass, y = height))+geom_point(na.rm = TRUE)+theme_classic()
+
+```
+
+2a. Change the color and shape of the points in your scatter plot. 
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(na.rm = TRUE, color = "purple", shape = 6)+theme_classic()
+```
+
+3. Add Homeworld as a third variable to your scatterplot. 
+```{r}
+ggplot(starwars, aes(x = mass, y = height, color = homeworld))+geom_point(na.rm = TRUE)+theme_classic()
+```
+
+3a. What do you notice about the graph? (e.g. describe what you see)
+```{r}
+#In my view, R automatically assigned different colors to different categories(homeworld).To me, it feels overwhelming and the graph has some readability issue. Hard to interpret. 
+```
+
+4. Make a boxplot of height. 
+```{r}
+ggplot(starwars, aes(y = height))+geom_boxplot(na.rm = TRUE)+theme_apa()+ylab("Height(cm)")
+```
+
+5. Make a boxplot of height for each species present in the data. 
+```{r}
+ggplot(starwars, aes(x = species, y = height))+geom_boxplot(na.rm = TRUE)+theme_apa()+xlab("Species")+ylab("Height(cm)")
+
+```
+
+5a. change the appearance of your graph in at least 3 ways. 
+```{r}
+#Add title and change theme
+ggplot(starwars, aes(x = species, y = height))+geom_boxplot(na.rm = TRUE)+theme_classic()+xlab("Species")+ylab("Height(cm)")+ggtitle("Height Distibutions by Species in Starwars")
+
+#Assign color to each species
+library(viridis)
+
+ggplot(starwars, aes(x = species, y = height, fill = species))+geom_boxplot(na.rm = TRUE)+scale_fill_viridis(discrete = TRUE, option = "magma")+theme_classic()+xlab("Species")+ylab("Height(cm)")+ggtitle("Height Distibutions by Species in Starwars")
+
+#Change the font for title, labels, category names
+ggplot(starwars, aes(x = species, y = height, fill = species))+geom_boxplot(na.rm = TRUE)+scale_fill_viridis(discrete = TRUE, option = "magma")+theme_classic()+xlab("Species")+ylab("Height(cm)")+ggtitle("Height Distibutions by Species in Starwars")+theme(text = element_text(family = "serif", size = 15))
+
+```
+
+6. Using any variables in the starwars dataset, create a graph that uses a color palette from viridis.
+```{r}
+ggplot(starwars, aes(x = skin_color, y = eye_color, color = hair_color))+geom_jitter(na.rm = TRUE)+scale_fill_viridis(discrete = TRUE, option = "rocket")+theme_apa()
+
+```
+
+7.Using any variables in the starwars dataset, create a graph that uses a color palette from RColorBrewer.
+```{r}
+library(RColorBrewer)
+
+ggplot(starwars, aes(x = birth_year, y = height, color = sex))+geom_jitter(na.rm = TRUE)+scale_color_brewer(palette = "BrBG")+theme_classic()
+
+```
+
+8. Using any variables in the starwars dataset, create a graph using facet_wrap
+```{r}
+ggplot(starwars, aes(x = mass, y = height))+geom_point(na.rm = TRUE)+theme_classic()+facet_wrap("gender")
+
+#Added labels for each. 
+
+labels_for_graph<- c(masculine = "Masculine Characters", feminine = "Feminine Characeters")
+
+ggplot(starwars, aes(x = mass, y = height))+geom_point(na.rm = TRUE)+theme_classic()+facet_wrap("gender", labeller=as_labeller(labels_for_graph))+xlab("Mass")+ylab("Height")+ggtitle("Mass and Height Distribution for Masculine and Feminine Characters")
+
+```
+
