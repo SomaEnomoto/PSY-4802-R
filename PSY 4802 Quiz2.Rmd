@@ -1,0 +1,92 @@
+---
+title: "PSY 4802 Quiz2"
+author: "Soma Enomoto"
+date: "2026-11-10"
+output: html_document
+---
+
+This quiz will focus on data frame manipulation, however, you may need to rely on skills you've learned in prior weeks. 
+
+1. load the starwars dataset from tidyverse
+```{r}
+library(tidyverse)
+data("starwars")
+```
+
+
+2. separate the films column so that there is one film in each column (don't worry about the "c(" and ) at the end for now)
+
+```{r}
+colnames(starwars)
+print(starwars$films)
+
+starwars <- starwars %>% separate(films, into = c("Film 1", "Film 2", "Film 3", "Film 4", "Film 5", "Film 6"), sep = ",")
+
+```
+
+
+
+3. alter the data from wide data to long data
+```{r}
+library(reshape2)
+library(dplyr)
+summarise(starwars)
+
+starwars_long<- starwars %>% mutate(mass = as.character(mass), height = as.character(height), birth_year = as.character(birth_year), vehicles = as.character(vehicles), starships = as.character(starships)) %>%pivot_longer(cols = colnames(starwars)[2:19], names_to = "Characteristics", values_to = "Details", values_drop_na = TRUE)
+```
+
+
+4. in the column where you stored the films, rename the levels so each film name is consistent (e.g. get rid of the "c(" and ")" )
+```{r}
+library(stringr)
+colnames(starwars_long)
+
+starwars_long <- starwars_long%>%mutate(Details = as.factor(Details))
+
+
+starwars_long<- starwars_long%>%mutate(Details = as.character(Details)%>% str_remove_all('c\\("')%>%str_remove_all('\\)')%>%str_remove_all('"')%>%as.factor())
+
+
+starwars_long$Details<- relevel(starwars_long$Details, ref = "A New Hope")
+levels(starwars_long$Details)
+
+```
+#I searched how to use slash \\ and how to use the str_remove_all() function.
+
+
+5. Create a column in your dataset that indicates whether a character was in the first starwars film, *Star Wars Episode IV: A New Hope* 
+```{r}
+#This is starwars_long version but I could not figure out (i.e., I could only detect the rows that contained "A New Hope" TRUE, but not all rows for each character who appeared in that film. ). I am also not sure if I understand this question correctly.
+
+starwars_long<- starwars_long%>%mutate(A_New_Hope = Details == "A New Hope")
+
+
+#I used the wide version and figured out the way to add new column "A New Hope" that correctly indicates 'yes' for characters who appeared in the film. 
+
+colnames(starwars)
+
+starwars<- starwars%>%mutate(`Film 1`= as.character(`Film 1`)%>%str_remove_all('c\\("')%>%str_remove_all('"')%>%as.factor())
+
+starwars<- starwars%>%mutate(A_New_Hope = ifelse(`Film 1` == "A New Hope"|`Film 2` == "A New Hope"|`Film 3` == "A New Hope"|`Film 4` == "A New Hope"| `Film 5` == "A New Hope"|`Film 6` == "A New Hope", "Yes")) 
+```
+
+6. BMI is calculated as mass in Kg/height in meters squared. You currently have mass in Kg and height in cm. Create a column that contains each character's BMI. 
+```{r}
+#Just a note: BMI = mass / (height/100)^2   cm --> meters 165/100= 1.65
+
+starwars<- starwars%>%mutate(BMI = mass/(height/100)^2)
+```
+#I translated the question, and AI translator answered me "BMIは、体重(kg)を身長(m)の2乗で割って算出します。"
+
+
+7. create a dataframe that contains only the name, hair color, and eye color for each character. 
+```{r}
+#Used wide version.
+name_hair_eye_info<- starwars %>% select(name, hair_color, eye_color)
+
+
+#Long version
+info_longdataver<- starwars_long%>%filter(Characteristics== "hair_color"|Characteristics == "eye_color")
+info_longdataver<- info_longdataver[, -4] #Just delete the fourth column
+
+```
