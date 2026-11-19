@@ -1,0 +1,108 @@
+---
+title: "PSY 4802 Quiz 3 Soma Enomoto"
+author: "Soma Enomoto"
+date: "2026-11-14"
+output: html_document
+---
+
+1. Load the spotify dataset (available in github repository).
+```{r}
+library(readr)
+spotify_data<- read.csv("spotifyDat Fall26.csv")
+```
+
+
+2. Create a bar graph of the artist column (Hint: use theme(axis.text.x = element_text(angle = 90)) to rotate the x axis).
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(jtools)
+
+
+ggplot(spotify_data, aes(x = artist))+geom_bar()+theme(axis.text.x = element_text(angle = 90))
+
+```
+
+3. Add genre as a third variable in your graph.
+```{r}
+
+ggplot(spotify_data, aes(x = artist, fill = genre))+geom_bar(na.rm = TRUE)+theme_apa()
+
+```
+
+
+4. Use color brewer to add color to your graph in 3. 
+```{r}
+library(RColorBrewer)
+
+ggplot(spotify_data, aes(x = artist, fill = genre ))+geom_bar(na.rm = TRUE)+theme_apa()+scale_fill_brewer(palette = "Set3")+theme_classic()
+
+```
+
+5. Place the legend for the graph you made in 3 on the bottom of the graph. 
+```{r}
+
+ggplot(spotify_data, aes(x = artist, fill = genre ))+geom_bar(na.rm = TRUE)+theme_apa()+scale_fill_brewer(palette = "Set3")+theme(legend.position="bottom")
+
+
+#I don't know how to fix this: Warning message:In RColorBrewer::brewer.pal(n, pal) :n too large, allowed maximum for palette Set3 is 12 Returning the palette you asked for with that many colors
+```
+
+As you probably recognized, the graph you made is really hard to read.- Yes!
+
+6. Separate the genre column into multiple columns (e.g. so each genre listed is in a unique column)
+```{r}
+
+unique(spotify_data$genre)
+
+spotify_data_genre_sep<- spotify_data%>%separate(genre, into = c("genre 1", "genre 2", "genre 3", "genre 4"), sep = ",")
+  
+```
+
+7. Use these genre columns to create a dataset in long format. 
+```{r}
+long_format_ver <- spotify_data_genre_sep%>% pivot_longer(cols = colnames(spotify_data_genre_sep)[6:9], names_to = "genre number", values_to = "genre", values_drop_na = TRUE)
+
+```
+
+8.use facet wrap to make graphs of artist by genre 
+```{r}
+
+ggplot(long_format_ver, aes(x = artist, fill = genre))+geom_bar()+theme_apa()+facet_wrap(~genre)+theme(legend.position="bottom")
+
+#I was not really sure what the question asks.
+```
+
+9. Create a graph that includes the variables tempo and dancability. 
+```{r}
+
+ggplot(long_format_ver, aes(x = tempo, y = danceability))+geom_jitter(color = "navy")+theme_apa()
+
+ggplot(spotify_data, aes(x = tempo, y = danceability))+geom_jitter(color = "navy")+theme_apa()
+
+#I wrote both long_format_ver and spotify_data ver because I was not sure which to use.- Soma
+```
+
+10. Add popularity as a third variable. 
+```{r}
+
+ggplot(long_format_ver, aes(x = tempo, y = danceability, color = popularity))+geom_jitter()+xlab("Tempo")+ylab("Danceability")+ggtitle("Tempo and Danceability by Popularity")+theme(legend.position="top")
+
+ggplot(spotify_data, aes(x = tempo, y = danceability, color = popularity))+geom_jitter()+xlab("Tempo")+ylab("Danceability")+ggtitle("Tempo and Danceability by Popularity")+theme(legend.position="top")
+
+
+```
+
+11. Use viridis as a color in your graph from #10
+```{r}
+library(viridis)
+
+graph_final1<- ggplot(long_format_ver, aes(x = tempo, y = danceability, color = popularity))+geom_jitter()+xlab("Tempo")+ylab("Danceability")+ggtitle("Tempo and Danceability by Popularity")+theme(legend.position="top")+scale_color_viridis(discrete = FALSE, option = "plasma")
+
+graph_final1
+
+graph_final2<- ggplot(spotify_data, aes(x = tempo, y = danceability, color = popularity))+geom_jitter()+xlab("Tempo")+ylab("Danceability")+ggtitle("Tempo and Danceability by Popularity")+theme(legend.position="top")+scale_color_viridis(discrete = FALSE, option = "plasma")
+
+graph_final2
+
+```
