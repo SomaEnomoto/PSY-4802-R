@@ -1,0 +1,114 @@
+
+---
+title: "Statistics in R Assignment"
+author: "Soma Enomoto"
+date: "2026-11-22"
+output: html_document
+---
+
+1. Open the diamonds dataset from ggplot2. 
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+data("diamonds")
+
+Dat<- diamonds
+```
+
+2. Run a correlation between the x and y variables. What do you notice? 
+```{r}
+cor_x_y<- cor.test(Dat$x, Dat$y)
+cor_x_y
+
+#What do you notice?: Noticed really strong correlation between x and y. r = 0.975 (df = 53938). p < 0.01 (2.2e-16). t value is very large (t = 1012.8). Hope this answers what the question meant.
+```
+
+3. What is the correlation between price and carat?
+```{r}
+cor_price_carat<- cor(Dat$price, Dat$carat)
+cor_price_carat
+
+#r = 0.922 (0.9215913)
+```
+
+4. Create a linear model predicting price from table. What is the coefficient for table? 
+```{r}
+linear_model<- lm(price ~ table, Dat)
+summary(linear_model)
+str(linear_model)
+coef(linear_model)
+
+#Coefficient for table:
+
+#(Intercept)       table 
+# -9109.0472    226.9837 
+
+```
+
+
+5. Run a regression and an Anova predicting price from color. What do you notice about the two types of output? 
+```{r}
+
+model_price_color<- lm(price ~ color, Dat)
+summary(model_price_color)
+
+
+aov_price_color<- aov(price ~ color, Dat)
+summary(aov_price_color)
+
+
+# Results/outputs from regression and ANOVA were similar but contained different information. The biggest difference I noticed is that the ANOVA outcome shows sum/mean squares (which regression does not), while the regression outcome shows coefficients for each color.
+
+#Notes: library(car) if using Anova()
+library(car)
+Anova(model_price_color)
+
+
+```
+
+6. Run a t test to determine if "D" color diamonds are more expensive than "E" color diamonds. 
+```{r}
+
+D_and_E<- subset(Dat, color == "D" | color == "E")
+
+
+t.test(price ~ color, D_and_E)
+
+#Yes, D-colored diamonds are more expensive than color E. Group D mean (3169.95) is higher than group E mean (3076.75).
+#But such difference is not statistically significant (p = 0.07844)
+
+```
+
+7. Open the warpbreaks dataset. What test would you use to determine the correlation between wool type and breaks?
+```{r}
+data("warpbreaks")
+
+#I would use point-biserial correlation to determine the correlation between wool type (binary) and breaks (continuous) because the data contains binary variable (A and B; dichotomous) and one continuous variable. 
+
+```
+
+8. What is the correlation between wool type and breaks? 
+```{r}
+library(ltm)
+
+Dat2<- warpbreaks
+biserial.cor(Dat2$breaks, Dat2$wool)
+
+#As a result, the correlation between the two is: 0.221 (0.220933)
+```
+
+9. A student has a 35 question, multiple choice test. Each question has 4 choices. If they answered 17 questions correctly, did their responses differ from chance?  
+```{r}
+binom.test(17, 35, p = .25)
+#The performance of the student (the student answered 17 out of 35 questions correctly) differed significantly from mere chance of 25% (p = 0.0027). The probability of successes was approx 48.57%, which is higher than 25% correct rate of random guessing.
+
+#Notes:
+#total = 35
+#successes = 17 (correct answer)
+#p = 0.25 (1 / 4; if guessing)
+
+#binom.test(successes, totalScores, probability)
+
+```
